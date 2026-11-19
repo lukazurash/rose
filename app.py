@@ -15,6 +15,7 @@ from flask import (Flask, abort, flash, g, jsonify, redirect, render_template, r
                    send_from_directory, session, url_for)
 from markupsafe import Markup, escape
 from PIL import Image, ImageOps, UnidentifiedImageError
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import check_password_hash, generate_password_hash
 
 import content
@@ -51,8 +52,9 @@ app.config.update(SECRET_KEY=secret_key(),
                   MAX_CONTENT_LENGTH=15 * 1024 * 1024,
                   SESSION_COOKIE_SAMESITE="Lax", SESSION_COOKIE_HTTPONLY=True,
                   SESSION_COOKIE_SECURE=PRODUCTION, SEND_FILE_MAX_AGE_DEFAULT=86400)
-if PRODUCTION and app.config["SECRET_KEY"] == "dev-only-change-me":
-    raise RuntimeError("Set SECRET_KEY before running in production.")
+if PRODUCTION:
+    # behind the host's proxy: the visitor's own address and https, so the limits count each visitor apart
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
 
 
 @app.url_defaults
