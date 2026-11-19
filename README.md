@@ -1,9 +1,6 @@
-# Rose — flower shop demo
+# Rose: redirect
 
-Static demo site for a Tbilisi flower shop (Georgian / English). Orders are sent to the shop's WhatsApp with the bouquet, date, district, card text and total filled in. No backend.
+This branch only sends the old GitHub Pages link (lukazurash.github.io/rose/) to the live site:
+https://lukazurashvilii.pythonanywhere.com
 
-- Change the shop number: `WA_NUMBER` at the top of `app.js`.
-- Bouquets, prices, delivery districts: `BOUQUETS` and `ZONES` in `app.js`.
-- Photos: Unsplash (free license), in `img/`.
-
-Preview locally: `python -m http.server` and open http://localhost:8000.
+The site itself (Flask + admin panel) is on the `v2` branch.
