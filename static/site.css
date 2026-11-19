@@ -1,0 +1,155 @@
+/* Rose: page CSS only where the kit has no rule (system.md). Tokens come from system.css. */
+
+/* the shop's own mark beside the name, in the nav and the footer */
+.nav__logo { gap: var(--s-2); }
+.rose-mark { width: 24px; height: 24px; flex: none; color: var(--accent); }
+.ground-brand .rose-mark { color: currentColor; }
+
+/* Georgian has no capitals and runs long: let headings break between words only */
+:root:lang(ka) :is(h1, h2, h3) { hyphens: manual; overflow-wrap: break-word; }
+
+/* the language link keeps its own script */
+.nav__actions .nav__link[lang] { font-weight: 500; }
+
+/* the nav panel's last card: the whole range, words only, on the panel's own ground */
+.menu-card--all { align-content: end; padding: var(--s-5); border: 1px solid var(--line); min-height: 100%; }
+
+/* goods: four bouquets on span-3, 4:5, the name and the price under the photograph (sections.md, Goods) */
+.goods { row-gap: var(--s-7); }
+.goods .tile__head > :is(h2, h3) { font: 500 var(--t-body)/1.4 var(--font-text); letter-spacing: 0; margin: 0; }
+.goods .tile__facts { margin-top: calc(-1 * var(--s-3)); font-size: var(--t-body); }
+#shop .section-head--split > p { max-width: 44ch; margin: 0; }
+/* a bouquet tile is a link: it lifts 2px while its photograph zooms inside its frame (motion.css does the zoom) */
+a.tile { transition: transform 180ms var(--ease); }
+@media (hover: hover) and (pointer: fine) { html:not([data-motion="off"]) a.tile:hover { transform: translateY(-2px); } }
+
+/* the brand band (colour-band close): the shop's green darkened until every word on it passes 7:1 */
+footer.closing.ground-brand { --p-accent: #0a5a32; }
+footer.closing.ground-brand .muted { color: var(--ink); }
+footer.closing.ground-brand .link { color: var(--ink); }
+/* the name set wide: Instrument Sans' tall letters need the whole line box, so nothing clips their tops */
+footer.closing .close__word { line-height: 1; overflow: visible; padding-top: .04em; }
+
+/* ---------------------------------------------------------------- the bouquet builder */
+.builder { margin-top: var(--s-6); }
+.builder output { font-variant-numeric: tabular-nums; font-weight: 500; }
+.field__hint { margin: 0; font-weight: 400; color: var(--muted); }
+.field input[type="range"] { height: 44px; padding: 0; border: 0; background: none; accent-color: var(--action); }
+.swatches { margin: 0; padding: 0; border: 0; display: flex; flex-wrap: wrap; gap: var(--s-2); }
+.swatches legend { padding: 0; margin-bottom: var(--s-2); }
+.sw { position: relative; display: inline-flex; align-items: center; gap: var(--s-2); min-height: 44px; padding: 0 var(--s-4) 0 var(--s-3);
+      border: 1px solid var(--line-strong); border-radius: var(--r-btn); font-weight: 400; font-size: var(--t-body); cursor: pointer;
+      transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease); }
+.sw input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.sw i { width: 18px; height: 18px; border-radius: 50%; background: var(--sw); box-shadow: inset 0 0 0 1px rgb(0 0 0 / .18); }
+.sw:has(input:checked) { border-color: var(--ink); background: var(--p-surface); }
+.sw:has(input:focus-visible) { outline: 2px solid var(--action); outline-offset: 2px; }
+
+/* the sketch: a line drawing of the bouquet the visitor is putting together. Blooms move to their place and
+   recolour as the budget and colours change; under reduced motion they simply stand. */
+.sketch { margin: 0; display: grid; place-items: center; background: var(--p-surface); border-radius: var(--r-lg);
+          height: min(100%, var(--pl-room)); min-height: 420px; }
+.sketch svg { width: min(100%, 540px); height: auto; max-height: calc(var(--pl-room) - 32px); overflow: visible; }
+.sk-paper { fill: #efe3d1; stroke: var(--p-ink); stroke-width: 1.4; stroke-linejoin: round; }
+.sk-paper--back { fill: #e3d2bb; }
+.sk-fold { fill: none; stroke: var(--p-ink); stroke-width: 1; stroke-opacity: .45; stroke-linecap: round; }
+.sk-bow path:first-child { fill: var(--p-accent); stroke: var(--p-ink); stroke-width: 1.2; stroke-linejoin: round; }
+.sk-bow path + path { fill: none; stroke: var(--p-accent); stroke-width: 3; stroke-linecap: round; }
+.sk-stems path { fill: none; stroke: #4f7a52; stroke-width: 2; stroke-linecap: round; }
+.sk-leaves path { fill: #7fa874; stroke: var(--p-ink); stroke-width: 1.1; stroke-linejoin: round; }
+.sk-leaves path.vein { fill: none; stroke-width: .8; stroke-opacity: .5; }
+.sk-bloom { transition: transform 620ms cubic-bezier(.22, 1, .36, 1); }
+.sk-bloom > g { transform-box: fill-box; transform-origin: center; transition: transform 520ms cubic-bezier(.22, 1, .36, 1); }
+.sk-bloom.is-new > g { transform: scale(0); }
+.sk-bloom .petal { fill: var(--c); stroke: var(--p-ink); stroke-width: 1.2; stroke-linejoin: round; transition: fill 400ms var(--ease); }
+.sk-bloom .inner { fill: none; stroke: var(--p-ink); stroke-width: 1.1; stroke-linecap: round; stroke-opacity: .7; }
+.sk-bloom .heart { fill: var(--d); stroke: var(--p-ink); stroke-width: 1; transition: fill 400ms var(--ease); }
+@media (prefers-reduced-motion: reduce) { .sk-bloom, .sk-bloom > g, .sk-bloom .petal, .sk-bloom .heart { transition: none; } }
+
+/* ---------------------------------------------------------------- weddings: the pair (two 4:3 on span-6) */
+.pair { margin-top: var(--s-7); }
+.pair__item { display: block; overflow: clip; border-radius: var(--r-lg); }
+.pair__item > img { display: block; width: 100%; aspect-ratio: 4 / 3; height: auto; max-height: calc(var(--pl-room) - 200px); object-fit: cover;
+                    transition: transform 600ms var(--ease); }
+@media (hover: hover) and (pointer: fine) { .pair__item:hover > img { transform: scale(1.03); } }
+#events .section-head--split > p { max-width: 62ch; margin: 0; }
+
+/* ---------------------------------------------------------------- the order form beside the chosen bouquet */
+.order__form { padding: 40px; background: var(--p-surface); border-radius: var(--r-lg); align-content: start; }
+.order__form .field :is(input, select) { background: var(--p-bg); }
+.order__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); flex-wrap: wrap; margin-top: var(--s-2); }
+.order__total { margin: 0; font-size: var(--t-body); font-variant-numeric: tabular-nums; }
+.order__total b { font-weight: 500; font-size: var(--t-card); }
+.order__pic { margin: 0; position: relative; min-height: 320px; align-self: stretch; overflow: clip; border-radius: var(--r-lg); }
+.order__pic > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 240ms var(--ease); }
+.order__pic > img.is-swapping { opacity: .35; }
+.form__status a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .order__pic > img { transition: none; } }
+
+/* the bouquets' foot row: the groups of the range, and the way to all of it */
+.goods-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); flex-wrap: wrap; margin-top: var(--s-7); }
+.goods-cats { margin: 0; color: var(--muted); }
+.goods-cats a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 4px;
+                transition: text-decoration-color var(--dur) var(--ease); }
+.goods-cats a:hover { text-decoration-color: currentColor; }
+
+/* the judges' tablet (640 to 1023, upright): each section stays one screen. The four bouquets keep one row,
+   the builder keeps its form and its sketch side by side, the visit photograph goes wide. */
+@media (min-width: 640px) and (max-width: 1023px) {
+  #shop .goods { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #shop .goods > .tile { grid-column: auto; }
+  #shop .goods > .tile:nth-child(n + 4) { display: none; }
+  #custom .field__hint { display: none; }
+  #custom > .wrap.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s-5); }
+  #custom > .wrap.grid > * { grid-column: auto; }
+  #custom .form { grid-template-columns: minmax(0, 1fr); }
+  #custom .form > .field { grid-column: 1 / -1; }
+  #custom .sketch { margin-top: 0; min-height: 0; height: auto; align-self: stretch; }
+  #visit .pl-photo > img { aspect-ratio: 2 / 1; }
+}
+
+/* ---------------------------------------------------------------- inner pages (catalogue, privacy, credits) */
+.page { padding: calc(var(--nav) + var(--s-8)) 0 var(--s-9); min-height: 70svh; }
+.page h1 { font-size: var(--t-h2); margin: 0 0 var(--s-5); }
+.catalogue .section-head--split { margin-bottom: var(--s-6); }
+.catalogue .section-head--split > p { max-width: 44ch; margin: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-bottom: var(--s-7); }
+.chip { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s-4); border: 1px solid var(--line-strong);
+        border-radius: var(--r-btn); font-size: var(--t-body); transition: border-color var(--dur) var(--ease); }
+.chip:hover { border-color: var(--ink); }
+.chip[aria-current="page"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.page__list { padding-left: 1.2em; display: grid; gap: var(--s-3); }
+
+/* a phone: one column, the sketch under the builder's words */
+@media (max-width: 1023px) {
+  .sketch { min-height: 360px; height: auto; margin-top: var(--s-6); }
+  .order__pic { margin-top: var(--s-6); min-height: 0; aspect-ratio: 4 / 3; }
+  .pair__item > img { max-height: none; }
+}
+@media (max-width: 639px) {
+  footer.closing .close__word { display: none; }   /* the name is in the bar above; the close keeps one screen */
+  .order__pic { aspect-ratio: 4 / 5; }
+  #shop .tile__facts, #shop .goods-cats { display: none; }   /* the phone shows the four bouquets and their prices on one screen */
+  #shop .goods { row-gap: var(--s-5); }
+  #shop .section-head > p { display: none; }
+  #shop .goods > .tile { --tile-ratio: 1 / 1; }
+  #visit .pl-photo { --pl-r: 1.7778; }
+  #visit .visit__col > .t-label { display: none; }
+  #visit .visit { gap: var(--s-4); }
+  #visit .visit__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s-4); row-gap: 0; }
+  #visit .visit__col.stack-4 > * + * { margin-top: var(--s-2); }
+  #visit .hours { grid-template-columns: 1fr; row-gap: 0; }
+  #visit .section-head { margin-bottom: var(--s-5); }
+  #visit .grid > .pl-photo:last-child > img { max-height: 268px; }
+  /* the story at rest (reduced motion, or before its script): its three chapters stacked, held to two whole screens */
+  main > #made[data-moment]:not(.is-live) { height: auto; min-height: calc(2 * 100lvh); }
+  main > #made[data-moment]:not(.is-live) .mo-ph__pic > img { aspect-ratio: 5 / 4; max-height: none; }
+  #shop .goods-foot { margin-top: var(--s-5); }
+  /* the order form opens on the page ground, its words on the page's left line */
+  .order__form { padding: 0; background: none; border-radius: 0; }
+  .order__form .field :is(input, select) { background: var(--p-surface); }
+  footer.closing .closing__links .link { display: flex; width: 100%; }
+  .order__foot .btn { width: 100%; }
+  .sketch { min-height: 300px; }
+}
+.footer__ways { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); }

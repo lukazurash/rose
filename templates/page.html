@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{{ h1 }}: {{ S('shop_name') }}{% endblock %}
+{% block main %}
+<section class="page" aria-labelledby="page-h">
+  <div class="wrap measure">
+    <h1 id="page-h">{{ h1 }}</h1>
+    {% if body %}<p>{{ body }}</p>{% endif %}
+    {% if items %}<ul class="page__list">{% for i in items %}<li>{{ i }}</li>{% endfor %}</ul>{% endif %}
+    {% if credits %}<ul class="page__list">{% for who, link in credits %}<li>{% if link %}<a class="link" href="{{ link }}">{{ who }}</a>{% else %}{{ who }}{% endif %}</li>{% endfor %}</ul>{% endif %}
+    {% if home_link %}<p><a class="link" href="{{ url_for('home') }}">{{ t('back_home') }}</a></p>{% endif %}
+  </div>
+</section>
+{% endblock %}

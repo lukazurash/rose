@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% block title %}ბუკეტები{% endblock %}
+{% block main %}
+<div class="head">
+  <h1>ბუკეტები</h1>
+  <a class="btn" href="{{ url_for('admin_bouquet') }}">+ ახალი ბუკეტი</a>
+</div>
+<p class="hint">★ ნიშნიანი ბუკეტები მთავარ გვერდზე ჩანს (პირველი ოთხი). რიგითობა: ნაკლები ნომერი უფრო წინ არის.</p>
+<div class="grid">
+{% for b in rows %}
+  <a class="card bq{% if not b.active %} is-off{% endif %}" href="{{ url_for('admin_bouquet', bid=b.id) }}">
+    {{ pic(b.photo, b.name_ka, '240px', 'bq__img') }}
+    <div class="bq__body">
+      <h2>{% if b.featured %}<span class="star" title="მთავარ გვერდზე">★</span> {% endif %}{{ b.name_ka }}</h2>
+      <p class="muted">{{ b.name_en }}</p>
+      <p><b>{{ b.price }} ₾</b> · #{{ b.sort }}{% if not b.active %} · <span class="pill">დამალული</span>{% endif %}</p>
+    </div>
+  </a>
+{% endfor %}
+</div>
+{% endblock %}

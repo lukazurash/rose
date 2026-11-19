@@ -1,0 +1,514 @@
+{
+ "start": "2026-11-19T18:46:42.536Z",
+ "round": 3,
+ "idle": 0,
+ "errors": 0,
+ "status": "open",
+ "history": [
+  {
+   "at": "2026-11-19T19:41:26.225Z",
+   "mode": "manual",
+   "status": "fail",
+   "fails": 9,
+   "round": 1,
+   "reused": false,
+   "stopHookActive": false
+  },
+  {
+   "at": "2026-11-19T19:43:28.634Z",
+   "mode": "manual",
+   "status": "fail",
+   "fails": 6,
+   "round": 2,
+   "reused": true,
+   "stopHookActive": false
+  },
+  {
+   "at": "2026-11-19T20:06:04.280Z",
+   "mode": "manual",
+   "status": "open",
+   "fails": 6,
+   "round": 3,
+   "reused": true,
+   "stopHookActive": false
+  },
+  {
+   "at": "2026-11-19T20:14:55.604Z",
+   "mode": "hook",
+   "host": "claude",
+   "decision": "allow",
+   "reason": "no build is active here",
+   "stopHookActive": false
+  }
+ ],
+ "max": 3,
+ "marker": {
+  "page": null,
+  "dir": "C:\\Users\\Students\\Documents\\claude\\rose",
+  "kind": "place",
+  "start": "2026-11-19T18:46:42.536Z",
+  "by": "start.mjs",
+  "url": "http://localhost:5000/",
+  "category": "bouquets and flower delivery",
+  "primary": "Order a bouquet"
+ },
+ "manual": true,
+ "roundKey": "7ead00fef8417d9e:94383983",
+ "roundFree": false,
+ "idleFree": false,
+ "blockKey": null,
+ "fp": "7ead00fef8417d9e",
+ "page": "http://localhost:5000/",
+ "found": {
+  "fails": [
+   {
+    "check": "card-layout",
+    "where": "section#shop > div.wrap > div.grid.goods \"ვარდისფერი ღრუბელი 120 ₾ ვარდები, მატიოლ\"",
+    "msg": "4 of 4 cards drawn one way (one panel, ground, placement and fragment): copies of one card",
+    "fix": "a card layout at most twice on a page: build the other sections another way",
+    "widths": [
+     1440,
+     390
+    ],
+    "from": "consistency",
+    "ids": [
+     "card-layout"
+    ],
+    "wheres": [
+     "section#shop > div.wrap > div.grid.goods \"ვარდისფერი ღრუბელი 120 ₾ ვარდები, მატიოლ\""
+    ]
+   },
+   {
+    "check": "copy-headline",
+    "where": "h1#hero-h \"ყვავილების მაღაზია ვაკეში, თბილისი\"",
+    "msg": "\"ყვავილების მაღაზია ვაკეში, თბილისი\" does not name what is sold (bouquets and flower delivery, bouquets, flower, delivery, from flags)",
+    "fix": "put the category noun in the h1 (and who it is for, or where), in 2 to 8 words",
+    "widths": [
+     1440
+    ],
+    "from": "consistency",
+    "ids": [
+     "copy-headline"
+    ],
+    "wheres": [
+     "h1#hero-h \"ყვავილების მაღაზია ვაკეში, თბილისი\""
+    ]
+   },
+   {
+    "check": "contrast",
+    "where": "section#shop > div.wrap > div.goods-foot > a.link \"ყველა ბუკეტი (11)\"",
+    "msg": "body text over a effect reads at 2.7:1 at its worst tenth (needs 4.5:1), on a busy ground",
+    "fix": "put the text on a calm part of the picture, or on a solid panel",
+    "widths": [
+     390
+    ],
+    "from": "consistency",
+    "ids": [
+     "contrast"
+    ],
+    "wheres": [
+     "section#shop > div.wrap > div.goods-foot > a.link \"ყველა ბუკეტი (11)\""
+    ]
+   },
+   {
+    "check": "section-gaps",
+    "where": "main#top > section.hero.hero--place / section#visit",
+    "msg": "120px between these sections, -65% against the median 347px",
+    "fix": "use one gap between sections (all within 25% of each other)",
+    "widths": [
+     390
+    ],
+    "from": "consistency",
+    "ids": [
+     "section-gaps"
+    ],
+    "wheres": [
+     "main#top > section.hero.hero--place / section#visit"
+    ]
+   },
+   {
+    "check": "section-gaps",
+    "where": "section#visit / section#shop",
+    "msg": "789px between these sections, +127% against the median 347px",
+    "fix": "use one gap between sections (all within 25% of each other)",
+    "widths": [
+     390
+    ],
+    "from": "consistency",
+    "ids": [
+     "section-gaps"
+    ],
+    "wheres": [
+     "section#visit / section#shop"
+    ]
+   },
+   {
+    "check": "section-gaps",
+    "where": "section#shop / section#custom",
+    "msg": "647px between these sections, +86% against the median 347px",
+    "fix": "use one gap between sections (all within 25% of each other)",
+    "widths": [
+     390
+    ],
+    "from": "consistency",
+    "ids": [
+     "section-gaps"
+    ],
+    "wheres": [
+     "section#shop / section#custom"
+    ]
+   },
+   {
+    "check": "edge-left",
+    "where": "#shop p \"ყველა ბუკეტს თან ახლავს უფასო ბა\"",
+    "msg": "starts at x 972.6; the lines are 120 and the column starts",
+    "fix": "start it on the .wrap left line",
+    "widths": [
+     1440
+    ],
+    "from": "layout",
+    "ids": [
+     "edge-left"
+    ],
+    "wheres": [
+     "#shop p \"ყველა ბუკეტს თან ახლავს უფასო ბა\""
+    ]
+   },
+   {
+    "check": "hero-lines",
+    "where": "section.hero h1",
+    "msg": "the check fills the h1 to 48 characters (this hero's maxChars in heroes.json), not the page's own: it takes 3 lines at 1440, 2 at most",
+    "fix": "the check fills the h1 to this hero's maxChars, not your own: take the next type pairing the deal printed (start.mjs); when the h1 is final and fits, waive it (target: section.hero h1)",
+    "widths": [
+     1440
+    ],
+    "from": "layout",
+    "ids": [
+     "hero-lines"
+    ],
+    "wheres": [
+     "section.hero h1"
+    ]
+   },
+   {
+    "check": "neighbour",
+    "where": "#made section.section \"როგორ იქმნება შენი ბუკეტიდილის მ\"",
+    "msg": "framed, 54px of #order section.section \"ბუკეტის შეკვეთა შეუკვეთე 18:00-მ\" shows",
+    "fix": "keep the next section's heading and picture out of this screen",
+    "widths": [
+     390
+    ],
+    "from": "layout",
+    "ids": [
+     "neighbour"
+    ],
+    "wheres": [
+     "#made section.section \"როგორ იქმნება შენი ბუკეტიდილის მ\""
+    ]
+   }
+  ],
+  "warns": [
+   {
+    "check": "copy-headline",
+    "where": "h1#hero-h \"ყვავილების მაღაზია ვაკეში, თბილისი\"",
+    "msg": "the h1 has 0 words (2 to 8 read at a glance)",
+    "fix": "put the category noun in the h1 (and who it is for, or where), in 2 to 8 words",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "copy-actions",
+    "where": "(the page)",
+    "msg": "the main action \"Order a bouquet\" does not read word for word the same in the nav or hero and the closing section",
+    "fix": "few actions, one wording: at most 2 in the hero, the main action word for word in nav, hero and close",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "section-gaps",
+    "where": "section#shop / section#custom",
+    "msg": "342px between these sections, +37% against the median 250px",
+    "fix": "use one gap between sections (all within 25% of each other)",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "photo-set",
+    "where": "div.grid.goods > a.tile.tile--portrait:nth-of-type(3) > div.tile__media > img \"c77474c39615-480.webp\"",
+    "msg": "9 photographs in more than one look: saturation from 0.20 to 0.58; the odd one out is c77474c39615-480.webp",
+    "fix": "grade the photographs to one look (light, colour, warmth), or replace the odd one out",
+    "widths": [
+     1440,
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "photo-credit",
+    "where": "(the page text)",
+    "msg": "2 library sources (unsplash, wikimedia): the page credits unsplash, the page credits wikimedia; confirm each shows the client's own product, place or people",
+    "fix": "confirm the library photograph shows the client's own product, place or people; otherwise replace it",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "skip-link",
+    "where": "header.nav > div.wrap.nav__bar > a.skip-link:nth-of-type(1) \"გადასვლა შინაარსზე\"",
+    "msg": "the first Tab stop is \"გადასვლა შინაარსზე\", not a skip link: a keyboard user tabs through the whole nav on every visit",
+    "fix": "add the starter's skip link as the header's first child: <a class=\"skip-link\" href=\"#top\">Skip to content</a>",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "action-repeat",
+    "where": "header.nav > div.wrap.nav__bar > div.nav__actions > a.btn.btn--primary:nth-of-type(2) \"შეუკვეთე ბუკეტი\"",
+    "msg": "\"შეუკვეთე ბუკეტი\" shows 2 times on the first screen at 1440px (nav, hero): the nav's button and the hero's; nothing else on the screen may repeat it",
+    "fix": "show the action once a screen besides the nav's button: the hero's, the close's or the phone bar's, never all at once",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "assumed",
+    "where": "div.visit.visit--card > div.visit__cols > div.visit__col:nth-of-type(2) > dl.hours \"ყოველდღე 09:00–21:00\"",
+    "msg": "2 facts marked as assumed, for the report: \"ყოველდღე 09:00–21:00\", \"ყოველდღე 09:00–21:00\"",
+    "fix": "list each assumed fact in the report for the client to confirm, or take it from the brief",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "section-height",
+    "where": "main#top",
+    "msg": "the page is 7 screens long (6300px on a 900px screen): a place page runs 3 to 6 screens (over 7 FAIL) (SR-2)",
+    "fix": "keep a place page at 3 to 6 screens: merge a short block into the section above, or cut a section",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "nav",
+    "where": "header.nav > div.wrap.nav__bar > button.nav__toggle",
+    "msg": "the nav is lopsided: its last item ends 13px inside the content's edge (366px), while its first starts on the other edge",
+    "fix": "start the nav's first item and end its last on the content's two edges",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "cta",
+    "where": "section#made \"როგორ იქმნება შენი ბუკეტი\"",
+    "msg": "a section over 1.5 screens long with no link or button in it",
+    "fix": "add the action: a button in the hero, one on every priced item, one in the closing section",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "section-gaps",
+    "where": "section#made / section#order",
+    "msg": "211px between these sections, -39% against the median 347px",
+    "fix": "use one gap between sections (all within 25% of each other)",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "section-gaps",
+    "where": "section#order / footer#contact",
+    "msg": "uneven space at the edge of a band: 211px outside its edge, 96px inside it (the space on either side of a change of ground reads as one gap only when the two match)",
+    "fix": "use one gap between sections (all within 25% of each other)",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "empty-area",
+    "where": "section#visit \"მაღაზია და მიტანა\"",
+    "msg": "38% of the section is empty: 576px under its last (img), in its 1491px of rows (WARN over 35%, FAIL over 50%)",
+    "fix": "fill the section: a picture or a second column beside the words, or more of its own content; the section stays one or two screens tall (T-height)",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   }
+  ],
+  "crashed": [],
+  "seconds": {
+   "consistency": 115,
+   "layout": 4
+  }
+ },
+ "open": [
+  {
+   "check": "contrast",
+   "where": "section#shop > div.wrap > div.goods-foot > a.link \"ყველა ბუკეტი (11)\"",
+   "msg": "body text over a effect reads at 2.7:1 at its worst tenth (needs 4.5:1), on a busy ground",
+   "fix": "put the text on a calm part of the picture, or on a solid panel",
+   "widths": [
+    390
+   ],
+   "from": "consistency",
+   "ids": [
+    "contrast"
+   ],
+   "wheres": [
+    "section#shop > div.wrap > div.goods-foot > a.link \"ყველა ბუკეტი (11)\""
+   ]
+  },
+  {
+   "check": "section-gaps",
+   "where": "main#top > section.hero.hero--place / section#visit",
+   "msg": "120px between these sections, -65% against the median 347px",
+   "fix": "use one gap between sections (all within 25% of each other)",
+   "widths": [
+    390
+   ],
+   "from": "consistency",
+   "ids": [
+    "section-gaps"
+   ],
+   "wheres": [
+    "main#top > section.hero.hero--place / section#visit"
+   ]
+  },
+  {
+   "check": "section-gaps",
+   "where": "section#visit / section#shop",
+   "msg": "789px between these sections, +127% against the median 347px",
+   "fix": "use one gap between sections (all within 25% of each other)",
+   "widths": [
+    390
+   ],
+   "from": "consistency",
+   "ids": [
+    "section-gaps"
+   ],
+   "wheres": [
+    "section#visit / section#shop"
+   ]
+  },
+  {
+   "check": "section-gaps",
+   "where": "section#shop / section#custom",
+   "msg": "647px between these sections, +86% against the median 347px",
+   "fix": "use one gap between sections (all within 25% of each other)",
+   "widths": [
+    390
+   ],
+   "from": "consistency",
+   "ids": [
+    "section-gaps"
+   ],
+   "wheres": [
+    "section#shop / section#custom"
+   ]
+  },
+  {
+   "check": "edge-left",
+   "where": "#shop p \"ყველა ბუკეტს თან ახლავს უფასო ბა\"",
+   "msg": "starts at x 972.6; the lines are 120 and the column starts",
+   "fix": "start it on the .wrap left line",
+   "widths": [
+    1440
+   ],
+   "from": "layout",
+   "ids": [
+    "edge-left"
+   ],
+   "wheres": [
+    "#shop p \"ყველა ბუკეტს თან ახლავს უფასო ბა\""
+   ]
+  },
+  {
+   "check": "neighbour",
+   "where": "#made section.section \"როგორ იქმნება შენი ბუკეტიდილის მ\"",
+   "msg": "framed, 54px of #order section.section \"ბუკეტის შეკვეთა შეუკვეთე 18:00-მ\" shows",
+   "fix": "keep the next section's heading and picture out of this screen",
+   "widths": [
+    390
+   ],
+   "from": "layout",
+   "ids": [
+    "neighbour"
+   ],
+   "wheres": [
+    "#made section.section \"როგორ იქმნება შენი ბუკეტიდილის მ\""
+   ]
+  }
+ ],
+ "waived": [
+  {
+   "check": "card-layout",
+   "where": "section#shop > div.wrap > div.grid.goods \"ვარდისფერი ღრუბელი 120 ₾ ვარდები, მატიოლ\"",
+   "msg": "4 of 4 cards drawn one way (one panel, ground, placement and fragment): copies of one card",
+   "fix": "a card layout at most twice on a page: build the other sections another way",
+   "widths": [
+    1440,
+    390
+   ],
+   "from": "consistency",
+   "ids": [
+    "card-layout"
+   ],
+   "wheres": [
+    "section#shop > div.wrap > div.grid.goods \"ვარდისფერი ღრუბელი 120 ₾ ვარდები, მატიოლ\""
+   ],
+   "reason": "sections.md Place, Goods: a florist shows four 4:5 bouquet tiles in one grid with one ratio, name and price; the same tile four times is the recipe"
+  },
+  {
+   "check": "copy-headline",
+   "where": "h1#hero-h \"ყვავილების მაღაზია ვაკეში, თბილისი\"",
+   "msg": "\"ყვავილების მაღაზია ვაკეში, თბილისი\" does not name what is sold (bouquets and flower delivery, bouquets, flower, delivery, from flags)",
+   "fix": "put the category noun in the h1 (and who it is for, or where), in 2 to 8 words",
+   "widths": [
+    1440
+   ],
+   "from": "consistency",
+   "ids": [
+    "copy-headline"
+   ],
+   "wheres": [
+    "h1#hero-h \"ყვავილების მაღაზია ვაკეში, თბილისი\""
+   ],
+   "reason": "the h1 is Georgian (ყვავილების მაღაზია = flower shop) and the checker matches English category words; the English page reads 'Flower shop in Vake, Tbilisi'"
+  },
+  {
+   "check": "hero-lines",
+   "where": "section.hero h1",
+   "msg": "the check fills the h1 to 48 characters (this hero's maxChars in heroes.json), not the page's own: it takes 3 lines at 1440, 2 at most",
+   "fix": "the check fills the h1 to this hero's maxChars, not your own: take the next type pairing the deal printed (start.mjs); when the h1 is final and fits, waive it (target: section.hero h1)",
+   "widths": [
+    1440
+   ],
+   "from": "layout",
+   "ids": [
+    "hero-lines"
+   ],
+   "wheres": [
+    "section.hero h1"
+   ],
+   "reason": "the h1 is final and takes two lines at 1440 in both languages; the stress test pads it to 48 characters, longer than either"
+  }
+ ],
+ "warnCount": 14,
+ "at": "2026-11-19T20:06:04.281Z",
+ "openTold": true
+}

@@ -1,0 +1,35 @@
+{% extends "admin/base.html" %}
+{% block title %}შეკვეთები{% endblock %}
+{% block main %}
+<div class="head">
+  <h1>შეკვეთები</h1>
+  <nav class="filters" aria-label="სტატუსი">
+    <a href="{{ url_for('admin_orders') }}" {% if not st %}aria-current="page"{% endif %}>ყველა</a>
+    {% for s in statuses %}<a href="{{ url_for('admin_orders', status=s) }}" {% if st == s %}aria-current="page"{% endif %}>{{ status_ka[s] }}</a>{% endfor %}
+  </nav>
+</div>
+{% if not rows %}<p class="empty">შეკვეთები ჯერ არ არის. საიტიდან შეკვეთა აქ გამოჩნდება.</p>{% endif %}
+<div class="list">
+{% for o in rows %}
+  <article class="card item status-{{ o.status }}">
+    <div class="item__top">
+      <h2>#{{ o.id }} · {{ o.bouquet }}</h2>
+      <span class="pill pill--{{ o.status }}">{{ status_ka[o.status] }}</span>
+    </div>
+    <dl class="facts">
+      <dt>მიტანა</dt><dd><b>{{ o.day }}</b> · {{ o.zone }}</dd>
+      <dt>კლიენტი</dt><dd>{{ o.name }}{% if o.phone %} · <a href="tel:{{ o.phone|replace(' ', '') }}">{{ o.phone }}</a>{% endif %}</dd>
+      {% if o.card %}<dt>ბარათი</dt><dd>“{{ o.card }}”</dd>{% endif %}
+      <dt>ჯამი</dt><dd>{{ o.total }} ₾ <span class="muted">({{ o.price }} + მიტანა {{ o.fee }})</span></dd>
+      <dt>მიღებულია</dt><dd class="muted">{{ o.created[:16]|replace('T', ' ') }} · {{ 'ქართ.' if o.lang == 'ka' else 'ინგლ.' }}</dd>
+    </dl>
+    <form class="item__act" method="post" action="{{ url_for('admin_status', kind='orders', rid=o.id) }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label class="sr" for="st-{{ o.id }}">სტატუსი</label>
+      <select id="st-{{ o.id }}" name="status" data-autosave>{% for s in statuses %}<option value="{{ s }}" {% if o.status == s %}selected{% endif %}>{{ status_ka[s] }}</option>{% endfor %}</select>
+      <button class="btn btn--quiet" type="submit">შენახვა</button>
+    </form>
+  </article>
+{% endfor %}
+</div>
+{% endblock %}

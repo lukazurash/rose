@@ -1,0 +1,20 @@
+{% extends "admin/base.html" %}
+{% block title %}ფოტოები{% endblock %}
+{% block main %}
+<div class="head"><h1>საიტის ფოტოები</h1></div>
+<p class="hint">ახლა საიტზე სანიმუშო ფოტოებია. ჩაანაცვლე შენი მაღაზიის ფოტოებით: დღის შუქზე, ფილტრის გარეშე. ჰორიზონტალური ფოტო ყველაზე კარგად ჯდება. ბუკეტების ფოტოები ბუკეტების გვერდზე იცვლება.</p>
+<div class="grid">
+{% for slot, label in slots %}
+  <form class="card ph" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="hidden" name="slot" value="{{ slot }}">
+    <h2>{{ label }}</h2>
+    {{ pic(S('photo_' ~ slot), t('alt_' ~ slot), '360px', 'ph__img', attrs='id="ph-' ~ slot ~ '"') }}
+    <label for="f-{{ slot }}">ახალი ფოტო</label>
+    <input id="f-{{ slot }}" name="photo" type="file" accept="image/jpeg,image/png,image/webp" data-preview="ph-{{ slot }}" required>
+    <button class="btn" type="submit">ატვირთვა</button>
+  </form>
+{% endfor %}
+</div>
+<p class="hint">ფოტოს აღწერა (ბრმა მომხმარებლებისთვის და Google-ისთვის) „ტექსტების“ გვერდზე იცვლება, ჯგუფში „ფოტოების აღწერა“.</p>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "admin/base.html" %}
+{% block title %}მიტანა{% endblock %}
+{% block main %}
+<div class="head"><h1>მიტანის უბნები და ფასები</h1></div>
+<p class="hint">ცარიელი სახელით ან ფასით რიგი არ შეინახება. {{ S('free_from') }} ₾-დან მიტანა უფასოა (იცვლება პარამეტრებში).</p>
+<form class="card form" method="post">
+  <button type="submit" class="sr" tabindex="-1" aria-hidden="true">შენახვა</button>
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <div class="zones">
+    <div class="zones__row zones__row--head"><span>ქართ.</span><span>ინგლ.</span><span>ფასი ₾</span><span></span></div>
+    {% for z in rows %}
+    <div class="zones__row">
+      <input type="hidden" name="id" value="{{ z.id }}">
+      <input name="name_ka" value="{{ z.name_ka }}" aria-label="უბანი ქართულად" maxlength="40">
+      <input name="name_en" value="{{ z.name_en }}" aria-label="უბანი ინგლისურად" maxlength="40">
+      <input name="fee" value="{{ z.fee }}" inputmode="numeric" aria-label="ფასი" maxlength="4">
+      <button class="btn btn--quiet" form="del-{{ z.id }}" type="submit" aria-label="წაშლა: {{ z.name_ka }}">წაშლა</button>
+    </div>
+    {% endfor %}
+    <div class="zones__row zones__row--new">
+      <input type="hidden" name="id" value="new">
+      <input name="name_ka" placeholder="ახალი უბანი" aria-label="ახალი უბანი ქართულად" maxlength="40">
+      <input name="name_en" placeholder="New district" aria-label="ახალი უბანი ინგლისურად" maxlength="40">
+      <input name="fee" placeholder="15" inputmode="numeric" aria-label="ახალი უბნის ფასი" maxlength="4">
+      <span></span>
+    </div>
+  </div>
+  <div class="actions"><button class="btn" type="submit">შენახვა</button></div>
+</form>
+{% for z in rows %}<form id="del-{{ z.id }}" method="post" data-confirm="წავშალო უბანი „{{ z.name_ka }}“?"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="delete" value="{{ z.id }}"></form>{% endfor %}
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ b.name_ka if b else 'ახალი ბუკეტი' }}{% endblock %}
+{% block main %}
+{% set v = form or b or {} %}
+{% set chosen = (form.getlist('cats') if form else (b.cats.split(',') if b else [])) %}
+<div class="head">
+  <h1>{{ b.name_ka if b else 'ახალი ბუკეტი' }}</h1>
+  <a href="{{ url_for('admin_bouquets') }}">← ყველა ბუკეტი</a>
+</div>
+<form class="card form" method="post" enctype="multipart/form-data">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <div class="photo-field">
+    {% if b %}{{ pic(b.photo, '', '320px', 'photo-field__img', attrs='id="bq-preview"') }}{% else %}<img id="bq-preview" class="photo-field__img" alt="" hidden>{% endif %}
+    <div>
+      <label for="photo">ფოტო {% if b %}(ახალი ფოტო ჩაანაცვლებს ძველს){% endif %}</label>
+      <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" data-preview="bq-preview" {% if not b %}required{% endif %}>
+      <p class="hint">JPG, PNG ან WEBP, 15 MB-მდე. საუკეთესოა ვერტიკალური (4:5) ფოტო. საიტი თავად შეამცირებს ზომას.</p>
+    </div>
+  </div>
+  <div class="two">
+    <div><label for="name_ka">სახელი (ქართ.)</label><input id="name_ka" name="name_ka" maxlength="60" required value="{{ v.name_ka or '' }}"></div>
+    <div><label for="name_en">სახელი (ინგლ.)</label><input id="name_en" name="name_en" maxlength="60" value="{{ v.name_en or '' }}"></div>
+    <div><label for="desc_ka">აღწერა (ქართ.)</label><input id="desc_ka" name="desc_ka" maxlength="140" value="{{ v.desc_ka or '' }}"></div>
+    <div><label for="desc_en">აღწერა (ინგლ.)</label><input id="desc_en" name="desc_en" maxlength="140" value="{{ v.desc_en or '' }}"></div>
+    <div><label for="price">ფასი (₾)</label><input id="price" name="price" type="number" min="1" max="100000" inputmode="numeric" required value="{{ v.price or '' }}"></div>
+    <div><label for="sort">რიგითობა</label><input id="sort" name="sort" type="number" inputmode="numeric" value="{{ v.sort if v.sort is not none else 0 }}"></div>
+  </div>
+  <fieldset>
+    <legend>კატეგორიები</legend>
+    {% for c in cats %}<label class="check"><input type="checkbox" name="cats" value="{{ c }}" {% if c in chosen %}checked{% endif %}> {{ t('cat_' ~ c) }}</label>{% endfor %}
+  </fieldset>
+  <div class="two">
+    <div><label for="tag">ნიშანი</label>
+      <select id="tag" name="tag">
+        <option value="">არცერთი</option>
+        {% for tg in ('hit', 'vase', 'premium') %}<option value="{{ tg }}" {% if v.tag == tg %}selected{% endif %}>{{ t('tag_' ~ tg) }}</option>{% endfor %}
+      </select></div>
+    <div class="checks">
+      <label class="check"><input type="checkbox" name="featured" {% if (form and form.get('featured')) or (not form and b and b.featured) %}checked{% endif %}> მთავარ გვერდზე (★)</label>
+      <label class="check"><input type="checkbox" name="active" {% if (form and form.get('active')) or (not form and (not b or b.active)) %}checked{% endif %}> ჩანს საიტზე</label>
+    </div>
+  </div>
+  <div class="actions"><button class="btn" type="submit">შენახვა</button></div>
+</form>
+{% if b %}
+<form class="danger" method="post" action="{{ url_for('admin_bouquet_delete', bid=b.id) }}" data-confirm="წავშალო „{{ b.name_ka }}“? ამას ვეღარ დააბრუნებ.">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <button class="btn btn--danger" type="submit">ბუკეტის წაშლა</button>
+  <span class="hint">თუ მხოლოდ დროებით გინდა დამალვა, მოხსენი „ჩანს საიტზე“.</span>
+</form>
+{% endif %}
+{% endblock %}

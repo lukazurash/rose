@@ -1,0 +1,45 @@
+{
+ "palettes": [
+  "rose-grey-green"
+ ],
+ "types": [
+  "instrument-sans"
+ ],
+ "dealt": [
+  "instrument-sans",
+  "source-serif",
+  "nunito"
+ ],
+ "moments": [
+  {
+   "id": "word-highlight",
+   "at": "2026-11-19T18:46:52.825Z",
+   "seed": "27036f74"
+  },
+  {
+   "id": "photo-chapters",
+   "at": "2026-11-19T18:46:52.825Z",
+   "seed": "27036f74"
+  }
+ ],
+ "photos": [
+  {
+   "trade": "florist",
+   "draft": true,
+   "lead": null,
+   "ids": [
+    "m138226685",
+    "m138226686",
+    "m183016636"
+   ],
+   "sections": [
+    "stems",
+    "stems",
+    "stems",
+    "hands"
+   ],
+   "seed": "km7zyk",
+   "at": "2026-11-19T18:47:57.671Z"
+  }
+ ]
+}

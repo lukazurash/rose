@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>{% block title %}მართვა{% endblock %}: {{ S('shop_name') }}</title>
+<link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..600&family=Noto+Sans+Georgian:wght@400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+{% set status_ka = {'new': 'ახალი', 'making': 'მზადდება', 'sent': 'გზაშია', 'done': 'ჩაბარდა', 'cancelled': 'გაუქმდა'} %}
+{% if session.admin %}
+<header class="bar">
+  <a class="bar__logo" href="{{ url_for('admin_orders') }}"><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6.5c-4 0-7 3-7 6.8s3 6.7 7 6.7 7-3 7-6.7"/><path d="M16 10.2c-2 0-3.4 1.4-3.4 3.2s1.5 3.3 3.4 3.3 3.4-1.4 3.4-3.3c0-3-3-6.7-7-6.7"/><path d="M16 20v8.5M16 25.2c-3 0-5-2-5-4.2 3 0 5 2 5 4.2z"/></g></svg>{{ S('shop_name') }}</a>
+  <nav class="bar__nav" aria-label="მართვა">
+    {% set ep = request.endpoint %}
+    <a href="{{ url_for('admin_orders') }}" {% if ep == 'admin_orders' %}aria-current="page"{% endif %}>შეკვეთები{% if new_orders %}<span class="badge">{{ new_orders }}</span>{% endif %}</a>
+    <a href="{{ url_for('admin_requests') }}" {% if ep == 'admin_requests' %}aria-current="page"{% endif %}>მოთხოვნები{% if new_requests %}<span class="badge">{{ new_requests }}</span>{% endif %}</a>
+    <a href="{{ url_for('admin_bouquets') }}" {% if ep in ('admin_bouquets', 'admin_bouquet') %}aria-current="page"{% endif %}>ბუკეტები</a>
+    <a href="{{ url_for('admin_zones') }}" {% if ep == 'admin_zones' %}aria-current="page"{% endif %}>მიტანა</a>
+    <a href="{{ url_for('admin_photos') }}" {% if ep == 'admin_photos' %}aria-current="page"{% endif %}>ფოტოები</a>
+    <a href="{{ url_for('admin_texts') }}" {% if ep == 'admin_texts' %}aria-current="page"{% endif %}>ტექსტები</a>
+    <a href="{{ url_for('admin_settings') }}" {% if ep == 'admin_settings' %}aria-current="page"{% endif %}>პარამეტრები</a>
+  </nav>
+  <div class="bar__end">
+    <a href="{{ url_for('home') }}" target="_blank" rel="noopener">საიტი ↗</a>
+    <form method="post" action="{{ url_for('admin_logout') }}"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="linkish" type="submit">გასვლა</button></form>
+  </div>
+</header>
+{% endif %}
+<main class="main">
+  {% with msgs = get_flashed_messages() %}{% if msgs %}<div class="flash" role="status">{% for m in msgs %}<p>{{ m }}</p>{% endfor %}</div>{% endif %}{% endwith %}
+  {% block main %}{% endblock %}
+</main>
+<script>
+// a status select saves as soon as it changes; the button stays for keyboards and no-script
+document.querySelectorAll('select[data-autosave]').forEach(s => s.addEventListener('change', () => s.form.requestSubmit()));
+// a photo field shows the picked file before it is saved
+document.querySelectorAll('input[type=file][data-preview]').forEach(i => i.addEventListener('change', () => {
+  const img = document.getElementById(i.dataset.preview); const f = i.files[0];
+  if (img && f) { img.src = URL.createObjectURL(f); img.hidden = false; }
+}));
+// ask before deleting
+document.querySelectorAll('form[data-confirm]').forEach(f => f.addEventListener('submit', e => { if (!confirm(f.dataset.confirm)) e.preventDefault(); }));
+</script>
+</body>
+</html>

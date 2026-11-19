@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% block head %}
+<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+<link rel="modulepreload" href="{{ url_for('static', filename='assets/moments/moments.js') }}">
+<link rel="modulepreload" href="{{ url_for('static', filename='assets/moments/lib.js') }}">
+<link rel="modulepreload" href="{{ url_for('static', filename='assets/moments/photo-chapters/moment.js') }}">
+{% endblock %}
+{% block main %}
+{% set hero = S('photo_hero') %}
+<section class="hero hero--place" data-enter aria-labelledby="hero-h">
+  <picture class="hero__bg" data-phone-fill style="--ly-pos: 45% 50%">
+    {% if phone_src(hero) %}<source media="(max-width: 639px)" srcset="{{ phone_src(hero) }}">{% endif %}
+    {{ pic(hero, t('alt_hero'), '100vw', lazy=False, attrs='data-source="stand-in" data-subject="hands"') }}
+  </picture>
+  <div class="wrap"><div class="hero-text">
+    <div class="hero__text">
+      <h1 id="hero-h">{{ t('hero_h1') }}</h1>
+      <p class="hero-notice">{{ t('hero_notice') }}</p>
+      <p class="hero__lead">{{ t('hero_lead') }}</p>
+      <div class="btn-row"><a class="btn btn--primary" href="#order">{{ t('cta_order') }}<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
+    </div>
+  </div></div>
+</section>
+
+<section class="section" id="visit" data-place="visit" aria-labelledby="visit-h">
+  <div class="wrap">
+    <div class="section-head"><h2 id="visit-h">{{ t('visit_h2') }}</h2></div>
+    <div class="grid grid--top">
+    <div class="visit visit--card span-6">
+      {% if S('hours_assumed') != '1' %}<div class="visit__head"><p class="t-small" data-open-now></p></div>{% endif %}
+      <div class="visit__cols">
+        <div class="visit__col stack-4">
+          <p class="t-label">{{ t('visit_label') }}</p>
+          <address class="visit__address">{% if S('street') %}{{ S('street') }}<br>{% endif %}{{ S('district_' ~ lang) }}, {{ S('city_' ~ lang) }}</address>
+          <a class="link" href="{{ map_link() }}">{{ t('visit_dirs') if S('street') else t('visit_area') }}</a>
+        </div>
+        <div class="visit__col">
+          <p class="t-label">{{ t('visit_hours') }}</p>
+          <dl class="hours"{% if S('hours_assumed') == '1' %} data-assumed{% else %} data-tz="Asia/Tbilisi"{% endif %}>
+            {% for h in hours() %}<dt data-days="{{ h.days }}">{{ h.label }}</dt><dd>{{ h.time }}</dd>{% endfor %}
+          </dl>
+        </div>
+      </div>
+      <ul class="visit__rows">
+        <li><span>{{ t('visit_delivery') }}</span><span>{{ t('visit_delivery_v') }}</span></li>
+        <li><span>{{ t('visit_events') }}</span><a class="link" href="{{ wa_link(t('ev_msg')) }}">{{ t('visit_events_v') }}</a></li>
+      </ul>
+    </div>
+    <figure class="pl-photo pl-photo--end span-6 start-7" style="--pl-r: 1">{{ pic(S('photo_visit'), t('alt_visit'), '(max-width: 1023px) 100vw, 588px', attrs='data-source="stand-in" data-subject="bouquet"') }}</figure>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="shop" aria-labelledby="shop-h">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="shop-h">{{ t('shop_h2') }}</h2>
+      <p>{{ t('shop_line') }}</p>
+    </div>
+    <div class="grid goods">
+      {% for b in featured %}
+      <a class="tile tile--portrait span-3" href="{{ url_for('home', b=b.id) }}#order" data-order="{{ b.id }}">
+        <div class="tile__media">{{ pic(b.photo, loc(b, 'name'), '(max-width: 1023px) 50vw, 282px', attrs='data-source="stand-in" data-subject="bouquet"') }}</div>
+        <div class="tile__head"><h3>{{ loc(b, 'name') }}</h3><span class="tile__price">{{ b.price }} ₾</span></div>
+        <p class="tile__facts">{{ loc(b, 'desc') }}</p>
+      </a>
+      {% endfor %}
+    </div>
+    <div class="goods-foot">
+      <p class="goods-cats">{% for c in cats %}<a href="{{ url_for('catalogue', cat=c) }}">{{ t('cat_' ~ c) }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+      <a class="link" href="{{ url_for('catalogue') }}">{{ t('shop_all') }} ({{ count }})</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="custom" style="--hm: 2" aria-labelledby="custom-h">
+  <div class="wrap grid grid--top">
+    <div class="span-6">
+      <div class="section-head">
+        <h2 id="custom-h">{{ t('c_h2') }}</h2>
+        <p>{{ t('c_line') }}</p>
+      </div>
+      <form class="form builder" id="customForm" action="{{ url_for('custom_request') }}" method="post" novalidate data-fix="{{ t('o_fix') }}">
+        <div class="field field--full">
+          <label for="c-budget">{{ t('c_budget') }}: <output id="c-budget-out" for="c-budget">120 ₾</output></label>
+          <input id="c-budget" name="budget" type="range" min="50" max="500" step="10" value="120" aria-describedby="c-budget-err">
+          <p class="field__error" id="c-budget-err" hidden>{{ t('e_budget') }}</p>
+        </div>
+        <fieldset class="field field--full swatches">
+          <legend>{{ t('c_colors') }}</legend>
+          {% for id, hex in colors %}
+          <label class="sw"><input type="checkbox" name="colors" value="{{ id }}"{% if id in ('pink', 'white') %} checked{% endif %}><i style="--sw: {{ hex }}" aria-hidden="true"></i>{{ t('col_' ~ id) }}</label>
+          {% endfor %}
+        </fieldset>
+        <div class="field field--full">
+          <label for="c-note">{{ t('c_note') }}</label>
+          <input id="c-note" name="note" type="text" maxlength="120" autocomplete="off" aria-describedby="c-note-hint">
+          <p class="field__hint" id="c-note-hint">{{ t('c_note_hint') }}</p>
+        </div>
+          <div class="field">
+            <label for="c-name">{{ t('c_name') }}</label>
+            <input id="c-name" name="name" type="text" autocomplete="name" maxlength="60" required aria-describedby="c-name-err">
+            <p class="field__error" id="c-name-err" hidden>{{ t('e_name') }}</p>
+          </div>
+          <div class="field">
+            <label for="c-phone">{{ t('c_phone') }} <span class="muted">({{ t('c_phone_hint') }})</span></label>
+            <input id="c-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="30" pattern="\+?[0-9 ()\-]{6,30}" aria-describedby="c-phone-err">
+            <p class="field__error" id="c-phone-err" hidden>{{ t('e_phone') }}</p>
+          </div>
+        <div class="btn-row"><button class="btn btn--secondary" type="submit">{{ t('c_send') }}</button></div>
+        <p class="form__status" role="status" data-form-status></p>
+      </form>
+    </div>
+    <figure class="sketch span-6 start-7" role="img" aria-label="{{ t('c_preview') }}">
+      <svg id="sketch" viewBox="34 4 332 456" aria-hidden="true">
+        <path class="sk-paper sk-paper--back" d="M86 238 L200 452 L314 238 Q262 262 200 256 Q138 262 86 238 Z"/>
+        <g class="sk-stems" id="skStems"></g>
+        <g class="sk-leaves" id="skLeaves"></g>
+        <g class="sk-blooms" id="skBlooms"></g>
+        <path class="sk-paper" d="M112 268 L200 452 L262 262 Q232 300 196 296 Q150 292 112 268 Z"/>
+        <path class="sk-fold" d="M200 452 L176 300 M200 452 L232 290"/>
+        <g class="sk-bow"><path d="M200 330 c-26 -22 -52 -10 -40 6 c8 10 26 4 40 -6 c14 10 32 16 40 6 c12 -16 -14 -28 -40 -6 z"/><path d="M196 334 l-14 36 M204 334 l16 34"/></g>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<section class="section" id="made" data-moment="photo-chapters" aria-labelledby="made-h">
+  <div class="wrap mo-ph">
+    <div class="mo-ph__head"><h2 id="made-h">{{ t('ch_h2') }}</h2><p>{{ t('ch_lead') }}</p></div>
+    <ol class="mo-ph__list">
+      {% for n in (1, 2, 3) %}
+      <li class="mo-ph__ch">
+        <figure class="mo-ph__pic">{{ pic(S('photo_ch' ~ n), t('alt_ch' ~ n), '100vw', attrs='data-source="stand-in" data-subject="florist at work"') }}</figure>
+        <h3>{{ t('ch' ~ n ~ '_t') }}</h3>
+        <p>{{ t('ch' ~ n ~ '_p') }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="order" style="--hm: 2" aria-labelledby="order-h">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="order-h">{{ t('o_h2') }}</h2>
+      <p>{{ t('o_line') }}</p>
+    </div>
+    <div class="grid grid--top order">
+      <form class="form order__form span-6" id="orderForm" action="{{ url_for('order') }}" method="post" novalidate
+            data-fix="{{ t('o_fix') }}" data-sending="{{ t('o_sending') }}" data-failed="{{ t('o_failed') }}" data-free-from="{{ S('free_from') }}"
+            data-free="{{ t('o_free') }}" data-fee-word="{{ t('o_fee') }}">
+        <div class="field field--full">
+          <label for="o-bouquet">{{ t('o_bouquet') }}</label>
+          <select id="o-bouquet" name="bouquet" required aria-describedby="o-bouquet-err">
+            {% for b in all_bouquets %}<option value="{{ b.id }}" data-price="{{ b.price }}" data-srcset="{{ srcset(b.photo) }}" data-alt="{{ loc(b, 'name') }}"{% if b.id == pick %} selected{% endif %}>{{ loc(b, 'name') }} · {{ b.price }} ₾</option>{% endfor %}
+          </select>
+          <p class="field__error" id="o-bouquet-err" hidden>{{ t('e_bouquet') }}</p>
+        </div>
+          <div class="field">
+            <label for="o-day">{{ t('o_date') }}</label>
+            <input id="o-day" name="day" type="date" min="{{ today }}" max="{{ last }}" value="{{ today }}" required aria-describedby="o-day-err">
+            <p class="field__error" id="o-day-err" hidden>{{ t('e_date') }}</p>
+          </div>
+          <div class="field">
+            <label for="o-zone">{{ t('o_zone') }}</label>
+            <select id="o-zone" name="zone" required aria-describedby="o-zone-err">
+              {% for z in zones %}<option value="{{ z.id }}" data-fee="{{ z.fee }}">{{ loc(z, 'name') }} · {{ z.fee }} ₾</option>{% endfor %}
+            </select>
+            <p class="field__error" id="o-zone-err" hidden>{{ t('e_zone') }}</p>
+          </div>
+          <div class="field">
+            <label for="o-name">{{ t('o_name') }}</label>
+            <input id="o-name" name="name" type="text" autocomplete="name" maxlength="60" required aria-describedby="o-name-err">
+            <p class="field__error" id="o-name-err" hidden>{{ t('e_name') }}</p>
+          </div>
+          <div class="field">
+            <label for="o-phone">{{ t('o_phone') }} <span class="muted">({{ t('o_phone_hint') }})</span></label>
+            <input id="o-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="30" pattern="\+?[0-9 ()\-]{6,30}" aria-describedby="o-phone-err">
+            <p class="field__error" id="o-phone-err" hidden>{{ t('e_phone') }}</p>
+          </div>
+        <div class="field field--full">
+          <label for="o-card">{{ t('o_card') }} <span class="muted">({{ t('o_card_hint') }})</span></label>
+          <input id="o-card" name="card" type="text" maxlength="200" autocomplete="off" aria-describedby="o-card-err">
+          <p class="field__error" id="o-card-err" hidden>{{ t('e_card') }}</p>
+        </div>
+        <div class="order__foot field--full">
+          <p class="order__total">{{ t('o_total') }}: <b id="o-total"></b> <span class="muted" id="o-fee"></span></p>
+          <button class="btn btn--primary" type="submit">{{ t('cta_order') }}</button>
+        </div>
+        <p class="form__status" role="status" data-form-status></p>
+        <p class="t-small muted">{{ t('o_reply') }}</p>
+      </form>
+      <figure class="order__pic span-6 start-7">
+        {% set first = (all_bouquets | selectattr('id', 'equalto', pick) | first) or all_bouquets[0] %}
+        {{ pic(first.photo, loc(first, 'name'), '(max-width: 1023px) 100vw, 588px', attrs='id="o-pic" data-source="stand-in" data-subject="bouquet"') }}
+      </figure>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script type="module" src="{{ url_for('static', filename='site.js') }}"></script>{% endblock %}

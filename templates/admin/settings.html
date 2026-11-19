@@ -1,0 +1,22 @@
+{% extends "admin/base.html" %}
+{% block title %}პარამეტრები{% endblock %}
+{% block main %}
+<div class="head"><h1>პარამეტრები</h1></div>
+<form class="card form" method="post" autocomplete="off">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <div class="two">
+    {% for key, label in fields %}
+    <div><label for="s-{{ key }}">{{ label }}</label><input id="s-{{ key }}" name="{{ key }}" value="{{ request.form.get(key, S(key)) }}" maxlength="80"
+      {% if key in ('free_from', 'days_ahead') %}inputmode="numeric"{% elif key == 'whatsapp' %}inputmode="tel"{% endif %}></div>
+    {% endfor %}
+  </div>
+  <label for="s-hours">სამუშაო საათები</label>
+  <textarea id="s-hours" name="hours" rows="3">{{ request.form.get('hours', S('hours')) }}</textarea>
+  <p class="hint">ერთი ხაზი ერთ რიგზე: დღეები | ქართული წარწერა | ინგლისური წარწერა | დრო. მაგ.: <code>mon-fri|ორშ–პარ|Mon to Fri|09:00–20:00</code> და <code>sat,sun|შაბ–კვ|Sat and Sun|10:00–18:00</code></p>
+  <label class="check"><input type="checkbox" name="hours_confirmed" {% if S('hours_assumed') != '1' %}checked{% endif %}> საათები ზუსტია (საიტი აჩვენებს „ახლა ღიაა“)</label>
+  <h2>პაროლის შეცვლა</h2>
+  <label for="s-pw">ახალი პაროლი (ცარიელი = არ იცვლება)</label>
+  <input id="s-pw" name="new_password" type="password" autocomplete="new-password" minlength="8">
+  <div class="actions"><button class="btn" type="submit">შენახვა</button></div>
+</form>
+{% endblock %}

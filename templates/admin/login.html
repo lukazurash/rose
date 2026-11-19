@@ -1,0 +1,11 @@
+{% extends "admin/base.html" %}
+{% block title %}შესვლა{% endblock %}
+{% block main %}
+<form class="card login" method="post">
+  <h1>{{ S('shop_name') }}: მართვა</h1>
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <label for="pw">პაროლი</label>
+  <input id="pw" name="password" type="password" autocomplete="current-password" required autofocus>
+  <button class="btn" type="submit">შესვლა</button>
+</form>
+{% endblock %}

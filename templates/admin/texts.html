@@ -1,0 +1,23 @@
+{% extends "admin/base.html" %}
+{% block title %}ტექსტები{% endblock %}
+{% block main %}
+<div class="head"><h1>საიტის ტექსტები</h1></div>
+<p class="hint">ფიგურულ ფრჩხილებში ჩაწერილი სიტყვები ავტომატურად ივსება: {cutoff} ბოლო დრო, {free} უფასო მიტანის თანხა, {min} ყველაზე იაფი მიტანა, {from} ყველაზე იაფი ბუკეტი, {n} შეკვეთის ნომერი. [[ორმაგ ფრჩხილებში]] ჩაწერილი სიტყვები მწვანედ გამოჩნდება.</p>
+<form method="post">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  {% for title, items in groups %}
+  <details class="card group" {% if loop.first %}open{% endif %}>
+    <summary><h2>{{ title }}</h2><span class="muted">{{ items|length }}</span></summary>
+    {% for r in items %}
+    <div class="txt">
+      <label for="ka_{{ r.key }}">ქართ.</label>
+      <textarea id="ka_{{ r.key }}" name="ka_{{ r.key }}" rows="{{ 1 if r.ka|length < 70 else 3 }}" required>{{ r.ka }}</textarea>
+      <label for="en_{{ r.key }}">ინგლ.</label>
+      <textarea id="en_{{ r.key }}" name="en_{{ r.key }}" rows="{{ 1 if r.en|length < 70 else 3 }}">{{ r.en }}</textarea>
+    </div>
+    {% endfor %}
+  </details>
+  {% endfor %}
+  <div class="actions actions--sticky"><button class="btn" type="submit">ყველა ტექსტის შენახვა</button></div>
+</form>
+{% endblock %}

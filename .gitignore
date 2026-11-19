@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+data/
+.taste-skill/chrome-*/
+.taste-skill/gate/
+.taste-skill/render/
+.taste-skill/*.txt
+.pytest_cache/

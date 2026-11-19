@@ -1,0 +1,28 @@
+{% extends "admin/base.html" %}
+{% block title %}მოთხოვნები{% endblock %}
+{% block main %}
+<div class="head"><h1>ინდივიდუალური ბუკეტები</h1></div>
+{% if not rows %}<p class="empty">მოთხოვნები ჯერ არ არის. „შექმენი შენი ბუკეტი“ ფორმიდან გამოგზავნილი იდეები აქ გამოჩნდება.</p>{% endif %}
+<div class="list">
+{% for r in rows %}
+  <article class="card item status-{{ r.status }}">
+    <div class="item__top">
+      <h2>#{{ r.id }} · {{ r.budget }} ₾</h2>
+      <span class="pill pill--{{ r.status }}">{{ status_ka[r.status] }}</span>
+    </div>
+    <dl class="facts">
+      <dt>ფერები</dt><dd>{% for c in r.colors.split(',') if c %}<span class="dot" style="--c: {{ dict(colors)[c] }}"></span>{{ t('col_' ~ c) }}{% if not loop.last %}, {% endif %}{% else %}<span class="muted">ფლორისტის არჩევანი</span>{% endfor %}</dd>
+      {% if r.note %}<dt>რისთვის</dt><dd>{{ r.note }}</dd>{% endif %}
+      <dt>კლიენტი</dt><dd>{{ r.name }}{% if r.phone %} · <a href="tel:{{ r.phone|replace(' ', '') }}">{{ r.phone }}</a>{% endif %}</dd>
+      <dt>მიღებულია</dt><dd class="muted">{{ r.created[:16]|replace('T', ' ') }}</dd>
+    </dl>
+    <form class="item__act" method="post" action="{{ url_for('admin_status', kind='requests', rid=r.id) }}">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label class="sr" for="rs-{{ r.id }}">სტატუსი</label>
+      <select id="rs-{{ r.id }}" name="status" data-autosave>{% for s in statuses %}<option value="{{ s }}" {% if r.status == s %}selected{% endif %}>{{ status_ka[s] }}</option>{% endfor %}</select>
+      <button class="btn btn--quiet" type="submit">შენახვა</button>
+    </form>
+  </article>
+{% endfor %}
+</div>
+{% endblock %}

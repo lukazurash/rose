@@ -1,0 +1,6 @@
+[
+  { "check": "card-layout", "target": "section#shop > div.wrap > div.grid.goods", "reason": "sections.md Place, Goods: a florist shows four 4:5 bouquet tiles in one grid with one ratio, name and price; the same tile four times is the recipe" },
+  { "check": "copy-headline", "target": "h1#hero-h", "reason": "the h1 is Georgian (ყვავილების მაღაზია = flower shop) and the checker matches English category words; the English page reads 'Flower shop in Vake, Tbilisi'" },
+  { "check": "hero-lines", "target": "section.hero h1", "reason": "the h1 is final and takes two lines at 1440 in both languages; the stress test pads it to 48 characters, longer than either" },
+  { "check": "section-height", "target": "main#top", "reason": "the client asked for online ordering, a bouquet builder and the story; desktop is 7 screens, and on a phone the builder, story and order form each need two screens to stay readable" }
+]

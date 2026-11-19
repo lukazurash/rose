@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ t('catalogue_h1') }}: {{ S('shop_name') }}{% endblock %}
+{% block main %}
+<section class="page catalogue" aria-labelledby="cat-h">
+  <div class="wrap">
+    <div class="section-head--split">
+      <h1 id="cat-h">{{ t('catalogue_h1') }}</h1>
+      <p>{{ t('catalogue_line') }}</p>
+    </div>
+    <nav class="chips" aria-label="{{ t('nav_bouquets') }}">
+      <a class="chip" href="{{ url_for('catalogue') }}"{% if not cat %} aria-current="page"{% endif %}>{{ t('cat_all') }}</a>
+      {% for c in cats %}<a class="chip" href="{{ url_for('catalogue', cat=c) }}"{% if cat == c %} aria-current="page"{% endif %}>{{ t('cat_' ~ c) }}</a>{% endfor %}
+    </nav>
+    {% if items %}
+    <div class="grid goods">
+      {% for b in items %}
+      <a class="tile tile--portrait span-3" href="{{ url_for('home', b=b.id) }}#order">
+        <div class="tile__media">{{ pic(b.photo, loc(b, 'name'), '(max-width: 639px) 50vw, (max-width: 1023px) 25vw, 282px', lazy=loop.index > 4) }}</div>
+        <div class="tile__head"><h2 class="t-card">{{ loc(b, 'name') }}</h2><span class="tile__price">{{ b.price }} ₾</span></div>
+        <p class="tile__facts">{{ loc(b, 'desc') }}{% if b.tag %} · {{ t('tag_' ~ b.tag) }}{% endif %}</p>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="lead-empty">{{ t('catalogue_empty') }} <a class="link" href="{{ url_for('catalogue') }}">{{ t('cat_all') }}</a></p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
