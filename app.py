@@ -32,8 +32,22 @@ STATUSES = ("new", "making", "sent", "done", "cancelled")
 COLORS = [("pink", "#f1a7b5"), ("red", "#c0283e"), ("white", "#f7f3ec"),
           ("peach", "#f6c29b"), ("yellow", "#f2cf4a"), ("blue", "#8fb4dc")]
 
+def secret_key():
+    """The env var if set; on a server, a random key made once and kept beside the database; locally a dev key."""
+    if os.environ.get("SECRET_KEY"):
+        return os.environ["SECRET_KEY"]
+    if not PRODUCTION:
+        return "dev-only-change-me"
+    f = DB_PATH.parent / ".secret_key"
+    if not f.exists():
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text(secrets.token_hex(32))
+        os.chmod(f, 0o600)
+    return f.read_text().strip()
+
+
 app = Flask(__name__)
-app.config.update(SECRET_KEY=os.environ.get("SECRET_KEY", "dev-only-change-me"),
+app.config.update(SECRET_KEY=secret_key(),
                   MAX_CONTENT_LENGTH=15 * 1024 * 1024,
                   SESSION_COOKIE_SAMESITE="Lax", SESSION_COOKIE_HTTPONLY=True,
                   SESSION_COOKIE_SECURE=PRODUCTION, SEND_FILE_MAX_AGE_DEFAULT=86400)
@@ -93,12 +107,13 @@ def init_db():
     con.executemany("INSERT OR IGNORE INTO settings(key,value) VALUES(?,?)", content.SETTINGS.items())
     if not con.execute("SELECT 1 FROM settings WHERE key='admin_hash'").fetchone():
         pw = os.environ.get("ADMIN_PASSWORD")
-        if not pw:
-            if PRODUCTION:
-                raise RuntimeError("Set ADMIN_PASSWORD for the first start in production.")
+        if not pw and not PRODUCTION:
             pw = "rose-admin"
             print("Admin password for this local copy: rose-admin (change it in Admin > Settings)")
-        con.execute("INSERT INTO settings(key,value) VALUES('admin_hash',?)", (generate_password_hash(pw),))
+        if pw:
+            con.execute("INSERT INTO settings(key,value) VALUES('admin_hash',?)", (generate_password_hash(pw),))
+        else:  # on a server the owner sets it with set_password.py; until then nobody can sign in
+            print("No admin password yet: run  python set_password.py")
     if not con.execute("SELECT 1 FROM zones").fetchone():
         con.executemany("INSERT INTO zones(name_ka,name_en,fee,sort) VALUES(?,?,?,?)",
                         [(*z, i) for i, z in enumerate(content.ZONES)])
@@ -555,6 +570,9 @@ def admin_login():
         if too_many("login-fail", 5, add=False):
             flash("ძალიან ბევრი მცდელობა. სცადე 10 წუთში.")
             return render_template("admin/login.html"), 429
+        if not S("admin_hash"):
+            flash("ადმინის პაროლი ჯერ არ არის დაყენებული: გაუშვი set_password.py.")
+            return render_template("admin/login.html")
         if check_password_hash(S("admin_hash"), request.form.get("password", "")):
             with HITS_LOCK:
                 HITS.pop(("login-fail", request.remote_addr), None)
